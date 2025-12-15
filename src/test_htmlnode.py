@@ -22,3 +22,7 @@ class TestTextNode(unittest.TestCase):
         node1 = HTMLNode("<h1>", "heading", ["child"], {"href": "https://www.tmbw.net", "target": "_blank"})
         node2 = HTMLNode("<h1>", "heading", ["child"], {"href": "https://www.tmbw.net", "target": "_bank"})
         self.assertNotEqual(node1, node2)
+
+    def test_leaf_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
