@@ -16,6 +16,8 @@ class TextNode:
         self.url = url
 
     def __eq__(self, node):
+        if not isinstance(node, TextNode):
+            return False
         return (
             self.text == node.text
             and self.text_type == node.text_type
@@ -25,7 +27,7 @@ class TextNode:
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
 
 def text_node_to_html_node(text_node):
-    match text_node:
+    match text_node.text_type:
         case text_node.text_type.TEXT:
             return LeafNode(None, text_node.text)
         case text_node.text_type.BOLD:
@@ -35,8 +37,8 @@ def text_node_to_html_node(text_node):
         case text_node.text_type.CODE:
             return LeafNode("code", text_node.text)
         case text_node.text_type.LINK:
-            return LeafNode("a", text_node.text, {"href": text_node.props})
+            return LeafNode("a", text_node.text, {"href": text_node.url})
         case text_node.text_type.IMAGE:
             return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
         case _:
-            raise Exception("Invalid Text Node")
+            raise Exception(f"Invalid Text Type: {text_node.text_type}")
