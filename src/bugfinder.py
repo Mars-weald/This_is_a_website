@@ -1,6 +1,5 @@
 from textnode import TextNode, TextType, text_node_to_html_node
-print("TEST MODULE TEXTTYPE ID:", id(TextType.TEXT))
+from inline import *
 
-node = TextNode("This is a text node", TextType.TEXT)
-html_node = text_node_to_html_node(node)
-print(type(html_node))
+text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+print(text_to_textnodes(text))
