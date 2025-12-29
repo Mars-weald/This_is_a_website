@@ -1,9 +1,6 @@
-from textnode import TextNode, TextType, text_node_to_html_node
-from blocks import *
+from htmlnode import ParentNode, LeafNode
 
-markdown = "# This is heading"
-marks = "1. Listo"
-marky = "```cody showdy```"
-markus = "bleh"
-
-print(block_to_block_type(marks))
+p1 = ParentNode("p", [LeafNode(None, "first")])
+p2 = ParentNode("p", [LeafNode(None, "second")])
+div = ParentNode("div", [p1, p2])
+print(div.to_html())

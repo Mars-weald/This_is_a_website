@@ -21,8 +21,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 
 def extract_markdown_images(text):
-    if "!" not in text:
-        raise Exception("ERROR: Not an image. Maybe use a different function.")
     matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return matches
 
@@ -85,18 +83,10 @@ def split_nodes_link(old_nodes):
 
 
 def text_to_textnodes(text):
-    text_to_node = TextNode(text, TextType.TEXT)
-    lonk = extract_markdown_links(text)
-    if len(lonk) != 0:
-        links = split_nodes_link([text_to_node])
-    else:
-        links = text_to_node
-    imgs = extract_markdown_images(text)
-    if len(imgs) != 0:
-        pic = split_nodes_image(links)
-    else:
-        pic = links
-    bolds = split_nodes_delimiter(pic, "**", TextType.BOLD)
-    italics = split_nodes_delimiter(bolds, "_", TextType.ITALIC)
-    cody = split_nodes_delimiter(italics, "`", TextType.CODE)
-    return cody
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    return nodes

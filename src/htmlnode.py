@@ -52,6 +52,8 @@ class ParentNode(HTMLNode):
             raise ValueError("Invalid Parent: No children")
         if self.children is None:
             return f"<{self.tag}>{self.value}</{self.tag}>"
+            
+        kiddos = ""
         for child in self.children:
-            kiddos = "" + child.to_html()
+            kiddos += child.to_html()
         return f"<{self.tag}>{kiddos}</{self.tag}>"
