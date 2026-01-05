@@ -1,6 +1,5 @@
-from htmlnode import ParentNode, LeafNode
+from blocks import *
 
-p1 = ParentNode("p", [LeafNode(None, "first")])
-p2 = ParentNode("p", [LeafNode(None, "second")])
-div = ParentNode("div", [p1, p2])
-print(div.to_html())
+templater = open("template.html")
+template = templater.read()
+templater.close()

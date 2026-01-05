@@ -63,14 +63,22 @@ def markdown_to_html_node(markdown):
             new_node = LeafNode("code", block)
             hey_kid.append(ParentNode("pre", [new_node], props=None))
         elif tipe == BlockType.QUOTE:
-            children = text_to_children(block)
+            clean = []
+            lines = block.split("\n")
+            for line in lines:
+                line = line.lstrip("> ")
+                clean.append(line)
+            texto = "\n".join(clean)
+            children = text_to_children(texto)
             hey_kid.append(ParentNode("blockquote", children))
         elif tipe == BlockType.UNORDERED_LIST:
             lines = block.split("\n")
             children = []
             for line in lines:
                 line = line.lstrip("-")
-                children.append(LeafNode("li", line))
+                line = line.strip()
+                kids = text_to_children(line)
+                children.append(ParentNode("li", kids))
             hey_kid.append(ParentNode("ul", children))
         elif tipe == BlockType.ORDERED_LIST:
             lines = block.split("\n")
