@@ -85,7 +85,8 @@ def markdown_to_html_node(markdown):
             children = []
             for line in lines:
                 line = line[3:]
-                children.append(LeafNode("li", line))
+                kids = text_to_children(line)
+                children.append(ParentNode("li", kids))
             hey_kid.append(ParentNode("ol", children))
         elif tipe == BlockType.HEADING:
             tags = {"h1": "# ", "h2": "## ", "h3": "### ", "h4": "#### ", "h5": "##### ", "h6": "###### "}

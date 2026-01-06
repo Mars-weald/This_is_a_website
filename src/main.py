@@ -7,7 +7,7 @@ def main():
         shutil.rmtree("public")
     os.mkdir("public")
     file_copier("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 def file_copier(path, destination):
     for thing in os.listdir(path):
@@ -43,8 +43,32 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Content }}", html)
     with open(dest_path, "w") as page:
         page.write(template)
-    
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for thing in os.listdir(dir_path_content):
+        if os.path.isdir(os.path.join(dir_path_content, thing)):
+            os.mkdir(os.path.join(dest_dir_path, thing))
+            generate_pages_recursive(os.path.join(dir_path_content, thing), template_path, os.path.join(dest_dir_path, thing))
+        elif os.path.isfile(os.path.join(dir_path_content, thing)):
+            if thing.endswith(".md"):
+                base = open(os.path.join(dir_path_content, thing), "r")
+                base_md = base.read()
+                base.close()
+
+                templater = open(template_path)
+                template = templater.read()
+                templater.close()  
+
+                node = markdown_to_html_node(base_md)
+                html = node.to_html()
+                title = extract_title(base_md)
+                template = template.replace("{{ Title }}", title)
+                template = template.replace("{{ Content }}", html)
+                name = os.path.join(dest_dir_path, thing)[:-3] + ".html"
+                with open(name, "w") as page:
+                    page.write(template)
+            else:
+                continue
         
 
 if __name__ == "__main__":
