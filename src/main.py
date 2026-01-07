@@ -14,7 +14,7 @@ def main():
         shutil.rmtree("docs")
     os.mkdir("public")
     os.mkdir("docs")
-    file_copier("static", "public")
+    file_copier("static", "docs")
     generate_pages_recursive("content", "template.html", "docs", basepath)
 
 def file_copier(path, destination):
