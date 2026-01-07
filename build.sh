@@ -1,0 +1,1 @@
+python3 src/main.py "/This_is_a_website/"

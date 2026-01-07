@@ -1,13 +1,21 @@
-import os, shutil
+import os, shutil, sys
 
 from blocks import *
+
+if len(sys.argv) >= 2:
+    basepath = sys.argv[1]
+else:
+    basepath = "/"
 
 def main():
     if os.path.exists("public"):
         shutil.rmtree("public")
+    if os.path.exists("docs"):
+        shutil.rmtree("docs")
     os.mkdir("public")
+    os.mkdir("docs")
     file_copier("static", "public")
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 def file_copier(path, destination):
     for thing in os.listdir(path):
@@ -44,11 +52,11 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, "w") as page:
         page.write(template)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     for thing in os.listdir(dir_path_content):
         if os.path.isdir(os.path.join(dir_path_content, thing)):
             os.mkdir(os.path.join(dest_dir_path, thing))
-            generate_pages_recursive(os.path.join(dir_path_content, thing), template_path, os.path.join(dest_dir_path, thing))
+            generate_pages_recursive(os.path.join(dir_path_content, thing), template_path, os.path.join(dest_dir_path, thing), basepath)
         elif os.path.isfile(os.path.join(dir_path_content, thing)):
             if thing.endswith(".md"):
                 base = open(os.path.join(dir_path_content, thing), "r")
@@ -64,6 +72,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 title = extract_title(base_md)
                 template = template.replace("{{ Title }}", title)
                 template = template.replace("{{ Content }}", html)
+                template = template.replace('href="/', f'href="{basepath}')
+                template = template.replace('src="/', f'src="{basepath}')
                 name = os.path.join(dest_dir_path, thing)[:-3] + ".html"
                 with open(name, "w") as page:
                     page.write(template)
