@@ -73,7 +73,9 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
                 template = template.replace("{{ Title }}", title)
                 template = template.replace("{{ Content }}", html)
                 template = template.replace('href="/', f'href="{basepath}')
+                template = template.replace("href=/", f'href={basepath}')
                 template = template.replace('src="/', f'src="{basepath}')
+                template = template.replace("src=/", f'src={basepath}')
                 name = os.path.join(dest_dir_path, thing)[:-3] + ".html"
                 with open(name, "w") as page:
                     page.write(template)
